@@ -17,10 +17,17 @@ hashes = [(os.path.relpath(n, local_dir), c, n) for (_, c, _, n) in [s.split() f
 
 for (filename, local_hash, path) in hashes:
   obj = bucket.Object(filename)
-  obj.load()
-  s3_hash = obj.metadata.get('hash')
+  exists = False
 
-  if s3_hash != local_hash:
+  try:
+    obj.load()
+  except botocore.exceptions.ClientError as e:
+    if e.response['Error']['Code'] != "404":
+      raise e
+  else:
+    exists = True
+
+  if not exists or obj.metadata.get('hash') != local_hash:
     print "{} differs, uploading".format(path)
     (mime, _) = mimetypes.guess_type(path)
     obj.upload_file(path, ExtraArgs={'ContentType': mime, 'Metadata': {'hash': local_hash}})
