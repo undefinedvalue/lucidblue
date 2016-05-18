@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import boto3
+import botocore
 import os
 from subprocess import check_output
 import mimetypes
