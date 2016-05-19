@@ -2,7 +2,7 @@ language: python
 python:
  - "2.7"
 
-install: pip install boto3
+install: pip install jinja2 libsass boto3
 
-script: .build_scripts/s3_upload.py
+script: .build_scripts/build.py
 
