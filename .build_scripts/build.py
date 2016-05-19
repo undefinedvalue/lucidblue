@@ -17,7 +17,9 @@ base_dir = os.path.dirname(build_script_dir)
 website_dir = os.path.join(base_dir, 'www')
 build_dir = os.path.join(base_dir, 'build')
 
-shutil.rmtree(build_dir)
+if os.path.isdir(build_dir):
+  shutil.rmtree(build_dir)
+
 os.mkdir(build_dir)
 
 # Import each file, sorted by name, except for the current script
