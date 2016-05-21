@@ -5,6 +5,7 @@ import botocore
 import os
 import hashlib
 import mimetypes
+from util import fileutils as futil
 
 def filehash(file):
   BLOCKSIZE = 65536
