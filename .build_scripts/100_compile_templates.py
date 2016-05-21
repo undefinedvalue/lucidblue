@@ -14,11 +14,11 @@ def build(base_dir, source_dir, build_dir):
     futil.try_mkdirs(os.path.dirname(dst_path))
 
     if futil.ext(src_path) == '.j2':
-      # If it starts with "_" then it is a partial
-      if not src_path.startswith('_'):
-        template = os.path.basename(src_path)
-        out_path = futil.chompext(dst_path)
+      template = os.path.basename(src_path)
 
+      # If it starts with "_" then it is a partial
+      if not template.startswith('_'):
+        out_path = futil.chompext(dst_path)
         env.get_template(template).stream().dump(out_path)
     else:
       # Copy all other files straight over
