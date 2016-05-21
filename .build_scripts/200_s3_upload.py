@@ -26,7 +26,7 @@ def build(base_dir, source_dir, build_dir):
   bucket = s3.Bucket(bucket_name)
 
   for (src_path, s3_key) in futil.pairwalk(source_dir, ''):
-    local_hash = filehash(path)
+    local_hash = filehash(src_path)
 
     obj = bucket.Object(s3_key)
     exists = False
