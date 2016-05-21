@@ -5,7 +5,6 @@ import botocore
 import os
 import hashlib
 import mimetypes
-import itertools
 
 def filehash(file):
   BLOCKSIZE = 65536
@@ -19,31 +18,28 @@ def filehash(file):
 
   return hasher.hexdigest()
 
-def build(base_dir, website_dir, build_dir):
+def build(base_dir, source_dir, build_dir):
   bucket_name = os.environ['S3_BUCKET']
 
   s3 = boto3.resource('s3')
   bucket = s3.Bucket(bucket_name)
 
-  for (root, dirs, files) in os.walk(build_dir):
-    for filename in files:
-      path = os.path.join(root, filename)
-      local_hash = filehash(path)
+  for (src_path, s3_key) in futil.pairwalk(source_dir, ''):
+    local_hash = filehash(path)
 
-      key = os.path.relpath(path, build_dir)
-      obj = bucket.Object(key)
-      exists = False
+    obj = bucket.Object(s3_key)
+    exists = False
 
-      try:
-        obj.load()
-      except botocore.exceptions.ClientError as e:
-        if e.response['Error']['Code'] != "404":
-          raise e
-      else:
-        exists = True
+    try:
+      obj.load()
+    except botocore.exceptions.ClientError as e:
+      if e.response['Error']['Code'] != "404":
+        raise e
+    else:
+      exists = True
 
-      if not exists or obj.metadata.get('hash') != local_hash:
-        print "{} differs, uploading".format(path)
-        (mime, _) = mimetypes.guess_type(path)
-        obj.upload_file(path, ExtraArgs={'ContentType': mime, 'Metadata': {'hash': local_hash}})
+    if not exists or obj.metadata.get('hash') != local_hash:
+      print "{} differs, uploading".format(src_path)
+      (mime, _) = mimetypes.guess_type(src_path)
+      obj.upload_file(src_path, ExtraArgs={'ContentType': mime, 'Metadata': {'hash': local_hash}})
 

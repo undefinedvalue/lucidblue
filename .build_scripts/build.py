@@ -14,7 +14,7 @@ files = [n for (n, e) in files if e == '.py']
 
 # Set up directories used by other scripts
 base_dir = os.path.dirname(build_script_dir)
-website_dir = os.path.join(base_dir, 'www')
+source_dir = os.path.join(base_dir, 'www')
 build_dir = os.path.join(base_dir, 'build')
 
 if os.path.isdir(build_dir):
@@ -23,8 +23,13 @@ if os.path.isdir(build_dir):
 os.mkdir(build_dir)
 
 # Import each file, sorted by name, except for the current script
+prev_mod_dir = source_dir
 for f in sorted(files):
   if f != curr_filename:
     print "Executing {}".format(f)
     mod = importlib.import_module(f)
-    mod.build(base_dir=base_dir, website_dir=website_dir, build_dir=build_dir)
+    mod_build_dir = os.path.join(build_dir, f)
+
+    mod.build(base_dir=base_dir, source_dir=prev_mod_dir, build_dir=mod_build_dir)
+
+    prev_mod_dir = mod_build_dir

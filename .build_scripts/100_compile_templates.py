@@ -1,27 +1,26 @@
 #!/usr/bin/env python
 
 import os
-from os.path import splitext, relpath, join
+import shutil
 from jinja2 import Environment, FileSystemLoader
+from util import fileutils as futil
 
-def build(base_dir, website_dir, build_dir):
-  extensions = ['.html', '.css', '.js']
-  loader = FileSystemLoader(website_dir)
+def build(base_dir, source_dir, build_dir):
+  loader = FileSystemLoader(source_dir)
   env = Environment(auto_reload=False, loader=loader)
 
-  # Render all files in the website_dir that have the above extensions and do
-  # not start with "_" (which indicates a partial)
-  for (root, dirs, files) in os.walk(website_dir):
-    templates = [f for f in files if splitext(f)[1] in extensions]
-    templates = [t for t in templates if not t.startswith('_')]
-    # Just get the part of the path after the website_dir
-    templates = [relpath(join(root, t), website_dir) for t in templates]
+  # Render all files in the source_dir that have a ".j2" extension
+  for (src_path, dst_path) in futil.pairwalk(source_dir, build_dir):
+    futil.try_mkdirs(os.path.dirname(dst_path))
 
-    for template in templates:
-      out_file = join(build_dir, template)
-      out_dir = os.path.dirname(out_file)
+    if futil.ext(src_path) == '.j2':
+      # If it starts with "_" then it is a partial
+      if not src_path.startswith('_'):
+        template = os.path.basename(src_path)
+        out_path = futil.chompext(dst_path)
 
-      if not os.path.isdir(out_dir):
-        os.makedirs(out_dir)
+        env.get_template(template).stream().dump(out_path)
+    else:
+      # Copy all other files straight over
+      shutil.copy2(src_path, dst_path)
 
-      env.get_template(template).stream().dump(out_file)
