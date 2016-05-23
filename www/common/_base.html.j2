@@ -1,0 +1,15 @@
+{% import 'common/_globals.j2' as globals %}
+<!DOCTYPE html>
+<html>
+<head>
+  {% block head %}
+  <link rel="shortcut icon" href="/images/favicon.png" />
+  <title>{{globals.title}}</title>
+  {% endblock %}
+</head>
+<body>
+  {% include 'common/_header.html.j2' %}
+  {% block body %}{% endblock %}
+  {% include 'common/_footer.html.j2' %}
+</body>
+</html>

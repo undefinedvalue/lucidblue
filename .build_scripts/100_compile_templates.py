@@ -7,7 +7,7 @@ from util import fileutils as futil
 
 def build(base_dir, source_dir, build_dir):
   loader = FileSystemLoader(source_dir)
-  env = Environment(auto_reload=False, loader=loader)
+  env = Environment(auto_reload=False, trim_blocks=True, lstrip_blocks=True, loader=loader)
 
   # Render all files in the source_dir that have a ".j2" extension
   for (src_path, dst_path) in futil.pairwalk(source_dir, build_dir):
