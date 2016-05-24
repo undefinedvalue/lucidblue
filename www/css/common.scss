@@ -1,24 +1,48 @@
+/* Style reset */
+body {
+  margin: 0;
+}
+
+header, footer {
+  display: block;
+}
+
+img {
+  border-style: none;
+}
+/* End style reset */
+
 
 html {
-  font: normal normal normal 100%/100% Arial,sans-serif;
+  font: normal normal normal 100% "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
-.title {
-  color: #000000;
-
-  .title-second {
-      font-variant: small-caps;
-      color: #0000FF;
-  }
+h1 {
+  font-size: 3rem;
+  line-height: 3rem;
 }
 
-.header {
+header {
+  margin-bottom: 2rem;
+
   .title {
-    font-size: 4rem;
+    color: #1B70FF;
+    font-weight: bold;
+
+    .title-second {
+        font-variant: small-caps;
+        color: #5F5FFF;
+    }
   }
 }
 
-.footer {
-  .footer-separator {
-  }
+.separator {
+  height: 1px;
+  background-color: #BBBBBB;
+  margin: 0.5rem 0;
+}
+
+footer {
+  font-size: 0.7rem;
+  margin-top: 2rem;
 }
