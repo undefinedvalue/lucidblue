@@ -3,7 +3,7 @@ body {
   margin: 0;
 }
 
-header, footer {
+nav, header, footer {
   display: block;
 }
 
@@ -17,32 +17,41 @@ html {
   font: normal normal normal 100% "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
-h1 {
-  font-size: 3rem;
-  line-height: 3rem;
+#flex-content {
+  display: flex;
+
+  // Margin on all children for footer separation
+  > * {
+    margin-bottom: 2rem;
+  }
 }
 
-header {
-  margin-bottom: 2rem;
+nav {
+  border-right: 1px solid #BBBBBB;
+  padding: 0 0.6rem;
+  margin-right: 0.6rem;
+
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    line-height: 2.5rem;
+    margin: 1rem 0;
+  }
 
   .title {
     color: #1B70FF;
     font-weight: bold;
 
     .title-second {
-        font-variant: small-caps;
-        color: #5F5FFF;
+      font-size: 1.3em;
+      font-variant: small-caps;
+      color: #5F5FFF;
     }
   }
 }
 
-.separator {
-  height: 1px;
-  background-color: #BBBBBB;
-  margin: 0.5rem 0;
-}
-
 footer {
   font-size: 0.7rem;
-  margin-top: 2rem;
+  padding: 0.5rem;
+  border-top: 1px solid #BBBBBB;
 }

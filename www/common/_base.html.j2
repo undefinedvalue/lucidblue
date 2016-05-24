@@ -2,16 +2,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  {% block head %}
   <meta charset="utf-8" />
   <link rel="stylesheet" type="text/css" href="css/common.css" />
   <link rel="shortcut icon" href="/images/favicon.png" />
   <title>{{globals.title}}</title>
-  {% endblock %}
 </head>
 <body>
-  {% include 'common/_header.html.j2' %}
-  {% block body %}{% endblock %}
+  <div id="flex-content">
+    {% include 'common/_nav.html.j2' %}
+
+    <div id="main">
+      {% block body %}{% endblock %}
+    </div>
+  </div>
+
   {% include 'common/_footer.html.j2' %}
 </body>
 </html>
