@@ -5,12 +5,12 @@ import shutil
 from jinja2 import Environment, FileSystemLoader
 from util import fileutils as futil
 
-def build(base_dir, source_dir, build_dir):
-  loader = FileSystemLoader(source_dir)
+def build(src_dir, dst_dir, opts):
+  loader = FileSystemLoader(src_dir)
   env = Environment(auto_reload=False, trim_blocks=True, lstrip_blocks=True, loader=loader)
 
-  # Render all files in the source_dir that have a ".j2" extension
-  for (src_path, dst_path) in futil.pairwalk(source_dir, build_dir):
+  # Render all files in the src_dir that have a ".j2" extension
+  for (src_path, dst_path) in futil.pairwalk(src_dir, dst_dir):
     futil.try_mkdirs(os.path.dirname(dst_path))
 
     if futil.ext(src_path) == '.j2':

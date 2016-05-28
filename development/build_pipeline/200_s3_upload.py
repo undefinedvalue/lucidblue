@@ -19,13 +19,13 @@ def filehash(file):
 
   return hasher.hexdigest()
 
-def build(base_dir, source_dir, build_dir):
+def build(src_dir, dst_dir, opts):
   bucket_name = os.environ['S3_BUCKET']
 
   s3 = boto3.resource('s3')
   bucket = s3.Bucket(bucket_name)
 
-  for (src_path, s3_key) in futil.pairwalk(source_dir, ''):
+  for (src_path, s3_key) in futil.pairwalk(src_dir, ''):
     local_hash = filehash(src_path)
 
     obj = bucket.Object(s3_key)
