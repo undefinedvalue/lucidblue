@@ -3,12 +3,20 @@
 import SimpleHTTPServer
 import SocketServer
 import os
+import shutil
 import threading
 import signal
 import watchdog
 from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers import Observer
 import build_pipeline.build
+
+refresh_js_path = os.path.join(os.path.dirname(__file__), 'refresh.js')
+
+class QuieterHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+  def log_request(self, code='-', size='-'):
+    if not self.requestline.startswith('HEAD'):
+      SimpleHTTPServer.SimpleHTTPRequestHandler.log_request(self, code, size)
 
 class Server:
   def __init__(self, src_dir, dst_dir, port=8080, **kwargs):
@@ -48,18 +56,27 @@ class Server:
     self.build_sem.acquire()
     try:
       print 'Building', self.src_dir
-      build_pipeline.build.build(self.src_dir, self.dst_dir, skip=['s3_upload'])
+      build_pipeline.build.build(self.src_dir, self.dst_dir, skip=['s3_upload'],
+          opts={'environment': 'development'})
+
+      dst_js_dir = os.path.join(self.final_build_dir, 'js')
+      if not os.path.exists(dst_js_dir):
+        os.mkdir(dst_js_dir)
+      shutil.copy(refresh_js_path, dst_js_dir)
+
       os.chdir(self.final_build_dir)
     finally:
       self.build_sem.release()
 
   def server(self):
-    Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-    self.httpd = SocketServer.TCPServer(('', self.port), Handler)
+    SocketServer.TCPServer.allow_reuse_address = True
+    self.httpd = SocketServer.TCPServer(('', self.port), QuieterHTTPRequestHandler)
 
-    self.httpd.serve_forever()
-    self.httpd.server_close()
-    print 'Server stopped'
+    try:
+      self.httpd.serve_forever()
+    finally:
+      self.httpd.server_close()
+      print 'Server stopped'
 
   def start_server(self):
     print 'Starting server'
