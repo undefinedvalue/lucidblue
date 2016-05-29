@@ -8,5 +8,5 @@ cache:
 
 install: pip install jinja2 libsass boto3 watchdog
 
-script: development/build_scripts/build.py
+script: "development/build.py build"
 
