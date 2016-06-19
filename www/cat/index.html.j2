@@ -1,0 +1,15 @@
+{% extends 'cat/common/_base.html.j2' %}
+{% set curr_page = "scoreboard" %}
+
+{% block body %}
+<div id="scoreboard">
+  <div id="last-updated">
+    Last refreshed <span id="last-updated-timestamp"></span>
+  </div>
+  <table id="scores"></table>
+</div>
+
+<script type="text/javascript">
+  catjs.scoreboard.update();
+</script>
+{% endblock %}

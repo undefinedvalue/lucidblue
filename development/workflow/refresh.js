@@ -7,13 +7,15 @@ var checkModified = function(originalMTime) {
   xhr.open('HEAD', window.location.href, true);
 
   xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      var mtime = new Date(xhr.getResponseHeader('Last-Modified'));
-      if (mtime.toString() !== 'Invalid Date') {
-        if (originalMTime && mtime.toString() !== originalMTime.toString()) {
-          location.reload(true);
-        } else {
-          originalMTime = mtime;
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        var mtime = new Date(xhr.getResponseHeader('Last-Modified'));
+        if (mtime.toString() !== 'Invalid Date') {
+          if (originalMTime && mtime.toString() !== originalMTime.toString()) {
+            location.reload(true);
+          } else {
+            originalMTime = mtime;
+          }
         }
       }
 
@@ -24,5 +26,6 @@ var checkModified = function(originalMTime) {
   xhr.send();
 };
 
-checkModified()
-
+if (window.location.href.indexOf("refresh=false") < 0) {
+  checkModified()
+}

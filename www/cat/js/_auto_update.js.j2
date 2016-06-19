@@ -1,0 +1,57 @@
+catjs.Autoupdater = function(url, time, onSuccess, onFailure) {
+  var updateTimestamp = function() {
+    var now = new Date();
+    var tsElement = document.getElementById('last-updated-timestamp');
+    tsElement.innerHTML = now.toLocaleString();
+  };
+
+  var update = function() {
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('GET', url, true);
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          onSuccess(data);
+        } else {
+          onFailure();
+        }
+      }
+    }
+
+    xhr.send();
+  };
+
+  var checkModified = function(originalMTime) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('HEAD', url, true);
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          var mtime = new Date(xhr.getResponseHeader('Last-Modified'));
+
+          if (mtime.toString() !== 'Invalid Date') {
+            if (mtime.toString() !== originalMTime.toString()) {
+              update();
+              originalMTime = mtime;
+            }
+          }
+        }
+
+        updateTimestamp();
+        setTimeout(function() { checkModified(originalMTime); }, time);
+      }
+    }
+
+    xhr.send();
+  };
+
+  this.start = function() {
+    checkModified(0);
+  }
+}
+

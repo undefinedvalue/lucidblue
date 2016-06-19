@@ -1,0 +1,14 @@
+{% import 'common/_globals.j2' as globals %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  {% if environment == 'development' %}
+  <script src="/js/refresh.js"></script>
+  {% endif %}
+  {% block head scoped %}{% endblock %}
+</head>
+<body>
+  {% block rootbody scoped %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% extends 'cat/common/_base.html.j2' %}
+{% set curr_page = "simulations" %}
+{% set statuses = ["Queued", "Running", "Finished", "Error", "Killed"] %}
+
+{% block body %}
+<div id="simulations">
+  <div id="filters">
+    {% for status in statuses -%}
+      <input class="filter-status" id="filter-status-{{status}}"
+        name="status" type="checkbox" value="{{status}}" checked
+        /><label
+      for="filter-status-{{status}}">{{status}}</label>
+    {%- endfor %}
+
+    <div class="filter-set">
+      <label for="filter-command">Command Regex:</label>
+      <input id="filter-command" name="command" type="text" />
+    </div>
+  </div>
+
+  <div id="counts">
+    <span id="shown-count">0</span> simulations shown
+    of <span id="total-count">0</span> total
+  </div>
+  <div id="last-updated">
+    Last refreshed <span id="last-updated-timestamp"></span>
+  </div>
+  <table id="sims-list" class="filtered"></table>
+</div>
+
+<script type="text/javascript">
+  catjs.simulations.setup();
+  catjs.simulations.update();
+</script>
+{% endblock %}

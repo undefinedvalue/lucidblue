@@ -15,13 +15,13 @@ def build(src_dir, dst_dir, opts):
     futil.try_mkdirs(os.path.dirname(dst_path))
 
     if futil.ext(src_path) == '.j2':
-      template = os.path.basename(src_path)
+      template = os.path.relpath(src_path, src_dir)
 
       # If it starts with "_" then it is a partial
-      if not template.startswith('_'):
+      if not os.path.basename(template).startswith('_'):
         out_path = futil.chompext(dst_path)
         env.get_template(template).stream().dump(out_path)
-    else:
+    elif not src_path.endswith(('.swp', '~')):
       # Copy all other files straight over
       shutil.copy2(src_path, dst_path)
 

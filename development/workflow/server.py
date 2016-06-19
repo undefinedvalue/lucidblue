@@ -94,7 +94,7 @@ class FilewatchHandler(PatternMatchingEventHandler):
     super(FilewatchHandler, self).__init__(*args, **kwargs)
     self.parent = parent
 
-  def on_created(self, event):
+  def on_any_event(self, event):
     if not event.is_directory:
       print 'Detected change in', event.src_path
       self.parent.rebuild()
