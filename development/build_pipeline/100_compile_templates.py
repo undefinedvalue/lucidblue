@@ -38,6 +38,7 @@ def build(src_dir, dst_dir, opts):
 
         post_date = commitDate(template_path)
 
+        print post_date
         date = dateutil.parser.parse(post_date).astimezone(tzstr("PST8PDT"))
         pretty_date = date.strftime('%A, %B ') + str(date.day) +\
             date.strftime(', %Y')
