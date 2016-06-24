@@ -11,7 +11,7 @@ from jinja2 import Environment, FileSystemLoader
 from util import fileutils as futil
 
 def commitDate(path):
-  git = Popen(['git', 'log', '--format=%aI', '--reverse', path], stdout=PIPE)
+  git = Popen(['git', 'log', '--format=%ai', '--reverse', path], stdout=PIPE)
 
   post_date = datetime.datetime.now().isoformat()
   for line in git.stdout:
@@ -38,7 +38,6 @@ def build(src_dir, dst_dir, opts):
 
         post_date = commitDate(template_path)
 
-        print post_date
         date = dateutil.parser.parse(post_date).astimezone(tzstr("PST8PDT"))
         pretty_date = date.strftime('%A, %B ') + str(date.day) +\
             date.strftime(', %Y')

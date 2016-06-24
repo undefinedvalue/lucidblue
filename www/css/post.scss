@@ -1,4 +1,4 @@
-$post-color: #BBBBFF;
+$post-color: #1B70FF;
 
 .post {
   position: relative;
@@ -23,7 +23,7 @@ $post-color: #BBBBFF;
     padding-bottom: 0.5rem;
 
     a {
-      color: #292929;
+      color: black;
       text-decoration: none;
 
       &:hover {
@@ -34,6 +34,5 @@ $post-color: #BBBBFF;
 
   .post-time {
     font-size: 0.7rem;
-    color: #505050;
   }
 }
