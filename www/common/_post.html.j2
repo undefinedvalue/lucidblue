@@ -3,6 +3,7 @@ post-{% filter urlencode %}{% block posttitle %}{% endblock %}{% endfilter %}
 {% endset %}
 <div class="post">
   <div class="background" id="{{post_id}}"></div>
+  <div class="post-time"><time datetime="{{date}}">{{pretty_date}}</time></div>
   <h2><a href="#{{post_id}}">{{self.posttitle()}}</a></h2>
   {% block post %}{% endblock %}
 </div>
