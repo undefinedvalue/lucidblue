@@ -1,3 +1,5 @@
+@import "mixins";
+
 $main-border-padding: 0.6rem;
 
 /* Style reset */
@@ -22,7 +24,7 @@ html {
 #flex-content {
   display: flex;
 
-  @media only screen and (max-width: 800px) {
+  @include mobile {
     flex-direction: column;
   }
 
@@ -41,6 +43,10 @@ html {
     font-size: 2.5rem;
     line-height: 2rem;
     margin: 1rem 0;
+
+    @include mobile {
+      margin: 0.7rem;
+    }
   }
 
   .title {
@@ -56,8 +62,13 @@ html {
 }
 
 #main {
-  width: 100%;
-  margin: $main-border-padding;
+  flex-grow: 1;
+  padding: $main-border-padding;
+
+  @include mobile {
+    padding: $main-border-padding / 2;
+    padding-bottom: $main-border-padding;
+  }
 }
 
 footer {

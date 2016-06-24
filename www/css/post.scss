@@ -1,9 +1,5 @@
 $post-color: #BBBBFF;
 
-#posts {
-  width: 100%;
-}
-
 .post {
   position: relative;
   border: 1px solid $post-color;
@@ -18,7 +14,7 @@ $post-color: #BBBBFF;
     left: 0;
     right: 0;
     height: 3rem;
-    background: linear-gradient($post-color, rgba(255,0,0,0));
+    background: linear-gradient($post-color, rgba(255,255,255,0));
   }
 
   h2 {
