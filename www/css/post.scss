@@ -1,0 +1,38 @@
+$post-color: #BBBBFF;
+
+#posts {
+  width: 100%;
+}
+
+.post {
+  position: relative;
+  border: 1px solid $post-color;
+  margin: 0 auto;
+  padding: 0.3rem 0.5rem 0.5rem 0.5rem;
+  max-width: 40rem;
+
+  .background {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background: linear-gradient($post-color, rgba(255,0,0,0));
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    margin: 0;
+    padding-bottom: 0.5rem;
+
+    a {
+      color: #222222;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
