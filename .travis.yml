@@ -8,5 +8,5 @@ cache:
 
 install: pip install jinja2 libsass boto3 watchdog python-dateutil
 
-script: "development/build.py build"
+script: "dev/build.py build"
 
