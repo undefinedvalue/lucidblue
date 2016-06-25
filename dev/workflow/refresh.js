@@ -4,7 +4,7 @@
 var checkModified = function(originalMTime) {
   var xhr = new XMLHttpRequest();
 
-  xhr.open('HEAD', window.location.href, true);
+  xhr.open('HEAD', window.location.origin + '/js/refresh.js', true);
 
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {

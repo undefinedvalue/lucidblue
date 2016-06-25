@@ -3,6 +3,7 @@
 import SimpleHTTPServer
 import SocketServer
 import os
+from datetime import datetime
 import shutil
 import threading
 import signal
@@ -59,16 +60,19 @@ class Server:
       build_pipeline.build.build(self.src_dir, self.dst_dir, skip=['s3_upload'],
           opts={'environment': 'development'})
 
+      # Copy the refresh.js file last, since that will indicate that the
+      # build is done.
       dst_js_dir = os.path.join(self.final_build_dir, 'js')
       if not os.path.exists(dst_js_dir):
         os.mkdir(dst_js_dir)
       shutil.copy(refresh_js_path, dst_js_dir)
-
-      os.chdir(self.final_build_dir)
+    except Exception as e:
+      print e
     finally:
       self.build_sem.release()
 
   def server(self):
+    os.chdir(self.final_build_dir)
     SocketServer.TCPServer.allow_reuse_address = True
     self.httpd = SocketServer.TCPServer(('', self.port), QuieterHTTPRequestHandler)
 
@@ -89,13 +93,18 @@ class Server:
       self.httpd.shutdown()
       self.server_thread.join(5000)
 
+
 class FilewatchHandler(PatternMatchingEventHandler):
   def __init__(self, parent, *args, **kwargs):
     super(FilewatchHandler, self).__init__(*args, **kwargs)
     self.parent = parent
+    self.last_event_time = datetime.now()
 
   def on_any_event(self, event):
-    if not event.is_directory:
+    dt = datetime.now() - self.last_event_time
+
+    if not event.is_directory and dt.total_seconds() > 1:
       print 'Detected change in', event.src_path
+      self.last_event_time = datetime.now()
       self.parent.rebuild()
 

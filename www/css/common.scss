@@ -1,3 +1,4 @@
+@import "global";
 @import "mixins";
 
 $main-border-padding: 0.6rem;
@@ -19,6 +20,7 @@ img {
 
 html {
   font: normal normal normal 100% "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  color: $text-color;
 }
 
 #flex-content {
@@ -50,13 +52,13 @@ html {
   }
 
   .title {
-    color: #1B70FF;
+    color: $palette-color;
     font-weight: bold;
 
     .title-second {
       font-size: 1.3em;
       font-variant: small-caps;
-      color: #5F5FFF;
+      color: $palette-color-darker;
     }
   }
 }

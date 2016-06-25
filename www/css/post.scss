@@ -1,26 +1,30 @@
-$post-color: #1B70FF;
+@import "global";
+
+$post-color: $palette-color-lighter;
 
 .post {
-  position: relative;
   border: 1px solid $post-color;
   margin: 1.5rem auto 0 auto;
   padding: 0.3rem 0.5rem 0.5rem 0.5rem;
   max-width: 40rem;
+  background: linear-gradient($post-color, transparent);
+  background-size: 100% 4rem;
+  background-repeat: no-repeat;
 
-  .background {
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4rem;
-    background: linear-gradient($post-color, rgba(255,255,255,0));
+  .link-icon {
+    display: inline-block;
+    /* See standalone version at https://lucidblue.net/images/link.svg */
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='24' fill='none' stroke='#707070' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M10.6 17.4c-2 4.2-5 6.2-7.5 4.7-5-3 2.6-15.3 7-12'/%3E%3Cpath d='M7.4 6.6c2-4.2 5-6.2 7.4-4.7 5.3 3-2.4 15.3-7 12'/%3E%3C/svg%3E");
+    background-size: 0.8rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 1.2rem;
+    height: 1.2rem;
   }
 
   h2 {
     font-size: 1.75rem;
     margin: 0;
-    padding-bottom: 0.5rem;
 
     a {
       color: black;
@@ -34,5 +38,7 @@ $post-color: #1B70FF;
 
   .post-time {
     font-size: 0.7rem;
+    padding-bottom: 0.5rem;
+    color: #707070;
   }
 }
