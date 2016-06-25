@@ -1,5 +1,5 @@
 {% set post_id %}
-post-{% filter urlencode %}{% block posttitle %}{% endblock %}{% endfilter %}
+post-{% filter urlencode %}{% filter replace(" ", "_") %}{% filter striptags %}{% block posttitle %}{% endblock %}{% endfilter %}{% endfilter %}{% endfilter %}
 {% endset %}
 <div class="post">
   <h2>{{self.posttitle()}}<a href="#{{post_id}}"><div class="link-icon"></div></a></h2>
