@@ -7,7 +7,7 @@ $post-color: $palette-color-lighter;
   margin: 1.5rem auto 0 auto;
   padding: 0.3rem 0.5rem 0.5rem 0.5rem;
   max-width: 40rem;
-  background: linear-gradient($post-color, transparent);
+  background: linear-gradient($post-color, $bg-color);
   background-size: 100% 4rem;
   background-repeat: no-repeat;
 
