@@ -1,0 +1,36 @@
+{% extends 'common/_post.html.j2' %}
+{% block posttitle -%}
+Website Tech
+{%- endblock %}
+{% block post %}
+<p>
+The obvious first topic is the website itself. It is a 100% static website,
+meaning that the content does not change for different visitors. Clearly, the
+content changes over time, but two people visiting at the same time will see
+the same thing. There is no server behind the website, at least not in the
+normal sense. It is hosted on AWS CloudFront, backed by S3. I did that
+mainly because it is super cheap and it is actually feasible since the site is
+static. It also helps to keep everything secure since I don't have to worry
+about someone screwing with my webserver.
+</p>
+<p>
+In order to make developing the site easier, I wrote some tools that handle
+composing and deploying it. I wrote these from scratch for a couple
+reasons: I think it's fun and there isn't really anything out there that fits
+my needs without being excessively bloated.
+</p>
+<p>
+You can find the source for this site, including the offline tools, on <a
+  href="https://github.com/undefinedvalue/lucidblue">lucidBlue's GitHub
+  repository</a>. I use <a href="https://travis-ci.org/">Travis CI</a> to
+deploy the site each time I commit to GitHub. In the end, this all means that
+when I want to make a new post, I just create a new post file and commit it.
+The tools I wrote will automatically rebuild the page and deploy it.
+</p>
+<p>
+Feel free to fork any of my code, the site content is available under the <a
+  href="https://creativecommons.org/licenses/by/4.0/">CC BY License</a> and the
+offline code is available under the <a
+  href="https://opensource.org/licenses/MIT">MIT License</a>.
+</p>
+{% endblock %}
