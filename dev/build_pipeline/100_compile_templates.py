@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import datetime
 import dateutil.parser
-from dateutil.tz import tzstr
+from dateutil.tz import tzstr, tzlocal
 from subprocess import Popen, PIPE
 from jinja2 import Environment, FileSystemLoader
 from util import fileutils as futil
@@ -13,7 +13,7 @@ from util import fileutils as futil
 def commitDate(path):
   git = Popen(['git', 'log', '--format=%ai', '--reverse', path], stdout=PIPE)
 
-  post_date = datetime.datetime.now().isoformat()
+  post_date = datetime.datetime.now(tzlocal()).isoformat()
   for line in git.stdout:
     post_date = line.strip()
     break;

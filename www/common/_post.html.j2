@@ -4,5 +4,7 @@ post-{% filter urlencode %}{% filter replace(" ", "_") %}{% filter striptags %}{
 <div class="post">
   <h2>{{self.posttitle()}}<a href="#{{post_id}}"><div class="link-icon"></div></a></h2>
   <div class="post-time"><time datetime="{{date}}">{{pretty_date}}</time></div>
+  <div class="post-body">
   {% block post %}{% endblock %}
+  </div>
 </div>
