@@ -30,22 +30,33 @@ def build(src_dir, dst_dir, opts):
   env.globals['environment'] = opts.get('environment')
 
   posts = []
+  posts_by_name = {}
 
   for (root, dirs, files) in os.walk(os.path.join(src_dir, 'posts')):
     for f in files:
-      if f.startswith('_'):
+      if not f.startswith('.') and not f == 'index.html.j2':
         template_path = os.path.join(root, f)
 
         post_date = commitDate(template_path)
 
-        date = dateutil.parser.parse(post_date).astimezone(tzstr("PST8PDT"))
-        pretty_date = date.strftime('%A, %B ') + str(date.day) +\
-            date.strftime(', %Y')
+        post_date = dateutil.parser.parse(post_date).astimezone(tzstr("PST8PDT"))
+        pretty_date = post_date.strftime('%A, %B ') + str(post_date.day) + post_date.strftime(', %Y')
 
         template_path = os.path.relpath(template_path, src_dir)
-        posts.append((post_date, pretty_date, template_path))
+
+        template = env.get_template(template_path)
+        ctx = template.new_context()
+        title = ' '.join(template.blocks['posttitle'](ctx)).strip()
+
+        post_path = '/' + template.name
+        if post_path.endswith('.j2'):
+          post_path = post_path[:-3]
+
+        posts.append(template_path)
+        posts_by_name[template.name] = (post_date, pretty_date, template_path, title, post_path)
 
   env.globals['post_templates'] = sorted(posts, reverse=True)
+  env.globals['post_templates_by_name'] = posts_by_name
 
   # Render all files in the src_dir that have a ".j2" extension
   for (src_path, dst_path) in futil.pairwalk(src_dir, dst_dir):
@@ -56,6 +67,7 @@ def build(src_dir, dst_dir, opts):
 
       # If it starts with "_" then it is a partial
       if not os.path.basename(template).startswith('_'):
+        env.globals['template_name'] = template
         out_path = futil.chompext(dst_path)
         env.get_template(template).stream().dump(out_path)
     elif not src_path.endswith(('.swp', '~')):

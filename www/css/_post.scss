@@ -5,13 +5,16 @@ $post-color: $palette-color-lighter;
 .post {
   border: 1px solid $post-color;
   border-radius: 0.2rem;
-  margin: 1.5rem auto 0 auto;
   padding: 0.3rem 0.5rem 0.5rem 0.5rem;
-  max-width: 40rem;
+  max-width: 65rem;
   background: linear-gradient($post-color, $bg-color);
   background-size: 100% 4rem;
   background-repeat: no-repeat;
   box-shadow: 2px 2px 1rem $post-color;
+
+  &:not(:first-child) {
+    margin-bottom: 1.5rem;
+  }
 
   h2 {
     font-size: 2rem;

@@ -1,10 +1,18 @@
-{% set post_id %}
-post-{% filter urlencode %}{% filter replace(" ", "_") %}{% filter striptags %}{% block posttitle %}{% endblock %}{% endfilter %}{% endfilter %}{% endfilter %}
-{% endset %}
+{% if not is_index %}
+  {% extends 'common/_base.html.j2' %}
+  {% block body %}
+  {{self.post_content()}}
+  {% endblock %}
+{% endif %}
+
+{% block post_content %}
+{% set date, pretty_date, post, title, post_path = post_templates_by_name[template_name] -%}
 <div class="post">
-  <h2><a href="#{{post_id}}">{{self.posttitle()}}</a></h2>
+  <h2><a href="{{post_path}}">{{title}}</a></h2>
   <div class="post-time"><time datetime="{{date}}">{{pretty_date}}</time></div>
   <div class="post-body">
   {% block post %}{% endblock %}
   </div>
 </div>
+{% endblock %}
+

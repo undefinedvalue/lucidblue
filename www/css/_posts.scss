@@ -1,0 +1,26 @@
+#posts-directory {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2, ul, li {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+    text-align: center;
+
+    a {
+      vertical-align: middle;
+      line-height: 1.1em;
+    }
+
+    .date {
+      color: #707070;
+      font-size: 0.8em;
+    }
+  }
+}
+

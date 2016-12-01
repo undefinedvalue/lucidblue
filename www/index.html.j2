@@ -1,8 +1,6 @@
 {% extends 'common/_base.html.j2' %}
 {% block body %}
-<div id="posts">
-  {% for date, pretty_date, post in post_templates -%}
-  {% include post %}
-  {%- endfor %}
-</div>
+{% set template_name = post_templates[0] %}
+{% set is_index = true %}
+{% include post_templates[0] %}
 {% endblock %}
