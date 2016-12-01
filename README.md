@@ -1,6 +1,10 @@
 [![BuildStatus](https://travis-ci.org/undefinedvalue/lucidblue.svg)](https://travis-ci.org/undefinedvalue/lucidblue)
 
 # lucidBlue
+https://lucidblue.net
+
+lucidBlue is a personal website. It consists of website content and the
+tools used to develop and deploy it.
 
 * [License](#license)
 * [Build and Development](#build-and-development)
