@@ -6,13 +6,30 @@
 {% endif %}
 
 {% block post_content %}
-{% set date, pretty_date, post, title, post_path = post_templates_by_name[template_name] -%}
+{% set post = post_data[template_name] %}
 <div class="post">
-  <h2><a href="{{post_path}}">{{title}}</a></h2>
-  <div class="post-time"><time datetime="{{date}}">{{pretty_date}}</time></div>
+  <h2><a href="{{post['path']}}">{{post['title']}}</a></h2>
+  <div class="post-time"><time datetime="{{post['date']}}">{{post['pretty_date']}}</time></div>
   <div class="post-body">
   {% block post %}{% endblock %}
   </div>
 </div>
+
+<div class="post-pager">
+  {%- if post['index'] != 0 -%}
+  {%- set newer_post = post_data[post_templates[post['index'] - 1]] -%}
+  <span class="newer"><a href="{{newer_post['path']}}">&lt;&lt; Newer</a></span>
+  {%- else -%}
+  <span class="pager-blank"></span>
+  {%- endif -%}
+
+  {%- if post['index'] != (post_data|length - 1) -%}
+  {%- set older_post = post_data[post_templates[post['index'] + 1]] -%}
+  <span class="older"><a href="{{older_post['path']}}">Older &gt;&gt;</a></span>
+  {%- else -%}
+  <span class="pager-blank"></span>
+  {%- endif -%}
+</div>
+
 {% endblock %}
 

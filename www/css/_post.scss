@@ -55,3 +55,27 @@ $post-color: $palette-color-lighter;
     }
   }
 }
+
+.post-pager {
+  display: flex;
+  width: 30%;
+  margin-top: 1rem;
+  font-size: 1.3rem;
+
+  .newer, .older, .pager-blank {
+    text-align: center;
+    flex: 1;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:visited {
+      color: $link-color;
+    }
+  }
+}

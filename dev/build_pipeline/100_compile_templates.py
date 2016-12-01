@@ -30,7 +30,6 @@ def build(src_dir, dst_dir, opts):
   env.globals['environment'] = opts.get('environment')
 
   posts = []
-  posts_by_name = {}
 
   for (root, dirs, files) in os.walk(os.path.join(src_dir, 'posts')):
     for f in files:
@@ -38,25 +37,36 @@ def build(src_dir, dst_dir, opts):
         template_path = os.path.join(root, f)
 
         post_date = commitDate(template_path)
-
         post_date = dateutil.parser.parse(post_date).astimezone(tzstr("PST8PDT"))
-        pretty_date = post_date.strftime('%A, %B ') + str(post_date.day) + post_date.strftime(', %Y')
 
         template_path = os.path.relpath(template_path, src_dir)
+        posts.append((post_date, template_path))
 
-        template = env.get_template(template_path)
-        ctx = template.new_context()
-        title = ' '.join(template.blocks['posttitle'](ctx)).strip()
+  posts = sorted(posts, reverse=True)
+  post_data = {}
 
-        post_path = '/' + template.name
-        if post_path.endswith('.j2'):
-          post_path = post_path[:-3]
+  for idx, (post_date, template_path) in enumerate(posts):
+    pretty_date = post_date.strftime('%A, %B ') + str(post_date.day) + post_date.strftime(', %Y')
 
-        posts.append(template_path)
-        posts_by_name[template.name] = (post_date, pretty_date, template_path, title, post_path)
+    template = env.get_template(template_path)
+    ctx = template.new_context()
+    title = ' '.join(template.blocks['posttitle'](ctx)).strip()
 
-  env.globals['post_templates'] = sorted(posts, reverse=True)
-  env.globals['post_templates_by_name'] = posts_by_name
+    post_path = '/' + template.name
+    if post_path.endswith('.j2'):
+        post_path = post_path[:-3]
+
+    post_data[template.name] = {
+      'index': idx,
+      'date': post_date,
+      'pretty_date': pretty_date,
+      'template': template_path,
+      'title': title,
+      'path': post_path
+    }
+
+  env.globals['post_templates'] = map(lambda x: x[1], posts)
+  env.globals['post_data'] = post_data
 
   # Render all files in the src_dir that have a ".j2" extension
   for (src_path, dst_path) in futil.pairwalk(src_dir, dst_dir):

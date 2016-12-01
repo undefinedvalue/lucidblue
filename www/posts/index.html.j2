@@ -1,8 +1,10 @@
 {% extends 'common/_base.html.j2' %}
 {% block body %}
 <div id="posts-directory">
-{% for post in post_templates -%}
-  {% set date, pretty_date, post, title, post_path = post_templates_by_name[post] -%}
+{% for template in post_templates -%}
+  {%- set post = post_data[template] -%}
+  {%- set date = post['date'] -%}
+
   {%- if cur_year != date.year -%}
     {%- if cur_year %}</ul>{% endif -%}
     {%- set cur_year = date.year -%}
@@ -10,7 +12,7 @@
     <ul>
   {%- endif -%}
   <li>
-    <a href="{{post_path}}">{{title}}</a>
+    <a href="{{post['path']}}">{{post['title']}}</a>
     <span class="date">- {{ date.strftime('%B') }} {{ date.day }}</span>
   </li>
 {%- endfor -%}
