@@ -70,6 +70,10 @@ p {
     @include mobile {
       margin: 0.2em;
     }
+
+    a {
+      text-decoration: none;
+    }
   }
 
   .title {
@@ -107,6 +111,10 @@ p {
 
     a {
       text-decoration: none;
+
+      &:not(:first-child) {
+        margin-left: 1em;
+      }
 
       &:hover {
         text-decoration: underline;
