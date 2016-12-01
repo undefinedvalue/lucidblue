@@ -30,8 +30,12 @@ class Server:
     self.server_thread = None
 
   def start(self):
+    # Watch the source files for changes
     filewatch = Observer()
-    filewatch.schedule(FilewatchHandler(parent=self, ignore_patterns=['*.swp', '*~']), self.src_dir, recursive=True)
+    filewatch.schedule(FilewatchHandler(parent=self,
+        ignore_patterns=['*.swp', '*~']),
+        self.src_dir,
+        recursive=True)
 
     # Clean shutdown on ctrl+c
     def signal_handler(signal, frame):
@@ -53,6 +57,7 @@ class Server:
     signal.pause()
     filewatch.join(5000)
 
+  # Rebuilds the project, as if by "build.py build --skip s3_upload"
   def rebuild(self):
     self.build_sem.acquire()
     try:
@@ -82,6 +87,7 @@ class Server:
       self.httpd.server_close()
       print 'Server stopped'
 
+  # Runs the HTTP server in a separate thread
   def start_server(self):
     print 'Starting server'
     self.server_thread = threading.Thread(target=lambda: self.server())
@@ -100,6 +106,8 @@ class FilewatchHandler(PatternMatchingEventHandler):
     self.parent = parent
     self.last_event_time = datetime.now()
 
+  # Rebuilds the project if any change is detected, unless we just rebuilt in
+  # the last second.
   def on_any_event(self, event):
     dt = datetime.now() - self.last_event_time
 

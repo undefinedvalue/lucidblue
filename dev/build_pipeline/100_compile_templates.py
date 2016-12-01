@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Compiles Jinja templates (.j2 extension)
+
 import os
 import shutil
 import subprocess
@@ -10,55 +12,67 @@ from subprocess import Popen, PIPE
 from jinja2 import Environment, FileSystemLoader
 from util import fileutils as futil
 
+# Returns the date of the first commit in git of the given file.
+# If the file is not committed in git, just returns the current date.
 def commitDate(path):
   git = Popen(['git', 'log', '--format=%ai', '--reverse', path], stdout=PIPE)
 
-  post_date = datetime.datetime.now(tzlocal()).isoformat()
+  commit_date = datetime.datetime.now(tzlocal()).isoformat()
   for line in git.stdout:
-    post_date = line.strip()
+    commit_date = line.strip()
     break;
 
   git.terminate()
   git.wait()
 
-  return post_date
+  return commit_date
 
 
 def build(src_dir, dst_dir, opts):
   loader = FileSystemLoader(src_dir)
-  env = Environment(auto_reload=False, trim_blocks=True, lstrip_blocks=True, loader=loader)
+  env = Environment(auto_reload=False,
+                    trim_blocks=True,
+                    lstrip_blocks=True,
+                    loader=loader)
   env.globals['environment'] = opts.get('environment')
 
   posts = []
 
+  # Make a list of the post templates and their commit dates
   for (root, dirs, files) in os.walk(os.path.join(src_dir, 'posts')):
     for f in files:
       if not f.startswith('.') and not f == 'index.html.j2':
         template_path = os.path.join(root, f)
 
-        post_date = commitDate(template_path)
-        post_date = dateutil.parser.parse(post_date).astimezone(tzstr("PST8PDT"))
+        date = commitDate(template_path)
+        date = dateutil.parser.parse(date).astimezone(tzstr("PST8PDT"))
 
         template_path = os.path.relpath(template_path, src_dir)
-        posts.append((post_date, template_path))
+        posts.append((date, template_path))
 
+  # Sort the posts by commit date so the newest post is first
   posts = sorted(posts, reverse=True)
   post_data = {}
 
-  for idx, (post_date, template_path) in enumerate(posts):
-    pretty_date = post_date.strftime('%A, %B ') + str(post_date.day) + post_date.strftime(', %Y')
+  # Generate a hash of data needed for each post
+  for idx, (date, template_path) in enumerate(posts):
+    # A displayable version of the date
+    pretty_date = date.strftime('%A, %B ') + \
+        str(date.day) + date.strftime(', %Y')
 
+    # Grab the post's title from it's "posttitle" block
     template = env.get_template(template_path)
     ctx = template.new_context()
     title = ' '.join(template.blocks['posttitle'](ctx)).strip()
 
+    # Generate the relative URL of the post for use in links
     post_path = '/' + template.name
     if post_path.endswith('.j2'):
         post_path = post_path[:-3]
 
     post_data[template.name] = {
       'index': idx,
-      'date': post_date,
+      'date': date,
       'pretty_date': pretty_date,
       'template': template_path,
       'title': title,

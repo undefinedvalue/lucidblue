@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Compiles Sass templates
+
 import sass
 import os
 import shutil

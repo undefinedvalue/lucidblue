@@ -9,7 +9,9 @@
 {% set post = post_data[template_name] %}
 <div class="post">
   <h2><a href="{{post['path']}}">{{post['title']}}</a></h2>
-  <div class="post-time"><time datetime="{{post['date']}}">{{post['pretty_date']}}</time></div>
+  <div class="post-time">
+    <time datetime="{{post['date']}}">{{post['pretty_date']}}</time>
+  </div>
   <div class="post-body">
   {% block post %}{% endblock %}
   </div>
@@ -18,14 +20,18 @@
 <div class="post-pager">
   {%- if post['index'] != 0 -%}
   {%- set newer_post = post_data[post_templates[post['index'] - 1]] -%}
-  <span class="newer"><a href="{{newer_post['path']}}">&lt;&lt; Newer</a></span>
+  <span class="newer">
+    <a href="{{newer_post['path']}}">&lt;&lt; Newer</a>
+  </span>
   {%- else -%}
   <span class="pager-blank"></span>
   {%- endif -%}
 
   {%- if post['index'] != (post_data|length - 1) -%}
   {%- set older_post = post_data[post_templates[post['index'] + 1]] -%}
-  <span class="older"><a href="{{older_post['path']}}">Older &gt;&gt;</a></span>
+  <span class="older">
+    <a href="{{older_post['path']}}">Older &gt;&gt;</a>
+  </span>
   {%- else -%}
   <span class="pager-blank"></span>
   {%- endif -%}

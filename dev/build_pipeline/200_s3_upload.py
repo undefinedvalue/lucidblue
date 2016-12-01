@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Uploads files to S3
+
 import boto3
 import botocore
 import os
@@ -7,6 +9,7 @@ import hashlib
 import mimetypes
 from util import fileutils as futil
 
+# Returns the MD5 hash of the given file
 def filehash(file):
   BLOCKSIZE = 65536
   hasher = hashlib.md5()
@@ -31,6 +34,7 @@ def build(src_dir, dst_dir, opts):
     obj = bucket.Object(s3_key)
     exists = False
 
+    # See if the file already exists by loading its metadata
     try:
       obj.load()
     except botocore.exceptions.ClientError as e:
@@ -39,6 +43,7 @@ def build(src_dir, dst_dir, opts):
     else:
       exists = True
 
+    # Upload the file if it is different from the existing one
     if not exists or obj.metadata.get('hash') != local_hash:
       print "{} differs, uploading".format(src_path)
       (mime, _) = mimetypes.guess_type(src_path)

@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# Entrypoint into build and development tools
+# For usage run: ./dev/build.py -h
+
+# See README.md for documentation on the development system.
+
 from os.path import dirname, abspath, join
 import argparse
 import build_pipeline.build
@@ -19,10 +24,13 @@ def server(args):
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(dest='do_action')
 
+# build
 build_parser = subparsers.add_parser('build', help='Build the project')
 build_parser.set_defaults(do_action=build)
-build_parser.add_argument('--skip', action='append', default=[])
+build_parser.add_argument('--skip', action='append', default=[],
+        help='Skips a step in the pipeline. e.g. --skip s3_upload')
 
+# server
 server_parser = subparsers.add_parser('server', help='Start a development server')
 server_parser.set_defaults(do_action=server)
 
